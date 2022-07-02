@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:textfield_search/textfield_search.dart';
 
 class Orders extends StatefulWidget {
-  const Orders({Key? key,}) : super(key: key);
+  final String title;
+  const Orders({Key? key, required this.title,}) : super(key: key);
 
   
 
@@ -25,7 +26,7 @@ TextEditingController myController = TextEditingController();
     var list;
     return Scaffold(
 
-      appBar: AppBar(),
+      appBar: AppBar(title: Text(widget.title),centerTitle: true,),
 
       body: Container(
           padding: const EdgeInsets.only( top: 10,left: 5),
@@ -116,8 +117,11 @@ Container(
 
         Expanded(
           child:  DataTable(
-                horizontalMargin: 20,
-                columnSpacing: 10,
+            
+                horizontalMargin: 2,
+                columnSpacing: 2,
+                
+              showBottomBorder: true,
                 columns: [
                   DataColumn(
                     label: Text(
@@ -144,7 +148,12 @@ Container(
                       style: style,
                     ),
                   ),
-
+ DataColumn(
+                    label: Text(
+                      "ORDERSTA",
+                      style: style,
+                    ),
+                  ),
                   DataColumn(
                     label: Text(
                       "STATUS",
@@ -195,21 +204,32 @@ DataRow dataRow(
     'Paid',
         style: Theme.of(context).textTheme.caption,
       )),
-      DataCell(
-        Row(
-          children: [
-            ElevatedButton(
-              child: const Text("Confirm",
-                 ),
-              style: ElevatedButton.styleFrom(
-              
-              ),
-              onPressed: () {
-               
-              },
-            ),
-          ],
-        ),
+       DataCell(Container(
+        margin: const EdgeInsets.only(right: 10),
+        padding: const EdgeInsets.all(5),
+        height: 25,
+         decoration:     const BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(5)),
+                          color: Color.fromARGB(255, 236, 207, 205),  
+                            shape: BoxShape.rectangle,
+                           
+                           
+                          ),
+         child: Row(children: [Container(
+          height: 10,
+          width: 10,
+      
+      decoration:  const BoxDecoration(
+                          color: Colors.red,  
+                            shape: BoxShape.circle,
+                           
+                           
+                          ),
+   ),const SizedBox(width: 5,),const Text('Confirmed')],),
+       )),
+      const DataCell(
+      
+      Icon(Icons.arrow_drop_down_outlined)
       ),
     ],
   );}
