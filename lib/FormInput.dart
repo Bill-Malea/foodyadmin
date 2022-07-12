@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 
-class FormInputFieldWithIcon extends StatelessWidget {
-  const FormInputFieldWithIcon({
+class FormInputField extends StatelessWidget {
+  const FormInputField({
     Key? key,
     //required this.iconPrefix,
     required this.labelText,
     required this.validator,
     this.keyboardType = TextInputType.text,
     this.obscureText = false,
-    required this.onchanged,
+    required this.onchanged, required this.isdescript,
   }) : super(key: key);
 
   final String labelText;
- 
+  final bool isdescript;
   final String? Function(String?) validator;
   final TextInputType keyboardType;
   final bool obscureText;
@@ -76,7 +76,7 @@ class FormInputFieldWithIcon extends StatelessWidget {
           ),
         ),
        
-        keyboardType: TextInputType.number,
+        keyboardType: TextInputType.text,
         obscureText: obscureText,
         validator: validator,
         onChanged: onchanged,

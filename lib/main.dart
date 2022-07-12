@@ -15,6 +15,9 @@ import 'Bottomnav/FoodNavTab.dart';
 import 'Bottomnav/FoodNavTab.dart';
 import 'Bottomnav/FoodNavTab.dart';
 import 'Categories/Categories.dart';
+import 'Customers/Customers.dart';
+import 'Delivery/Deliveryman.dart';
+import 'Provider/Addcategory.dart';
 import 'Provider/FoodsNavbar.dart';
 import 'Provider/Themeprovider.dart';
 void main() {
@@ -27,7 +30,18 @@ var preferences = GetStorage();
      MultiProvider(
       providers: [  ChangeNotifierProvider(
         create: (context) => FoodNavBar(),
-      ),],
+      ),
+      ChangeNotifierProvider(
+        create: (context) => AddCategory(),
+      ),
+       ChangeNotifierProvider(
+        create: (context) => AddCategory(),
+      ),
+      
+      
+      
+      
+      ],
        child: ChangeNotifierProvider(
           create: (context) => ThemeProvider(
               isDarkMode: theme
@@ -92,14 +106,18 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+   final _categorieskey = GlobalKey<FormState>();
+
+
   @override
   Widget build(BuildContext context) {
 
     List<Widget> tabWidgets = <Widget>[
       const MyHomePage(),
-      const Categories (),
-      const Categories (),
-      const Categories (),
+     Categories (formkey: _categorieskey,),
+      const DeliveryMan (),
+      Categories (formkey: _categorieskey,),
+      const Customers ()
     ];
    
     var _selected =

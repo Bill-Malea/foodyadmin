@@ -41,6 +41,8 @@ dependencies:
   dropdown_button2:
   cached_network_image: ^3.2.0
   textfield_search: ^0.10.0
+  dio: ^4.0.6
+  fluttertoast: ^8.0.9
 
   
 dev_dependencies:
