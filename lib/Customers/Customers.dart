@@ -147,13 +147,13 @@ DataRow dataRow(
       issubcategory ? 
       InkWell(
         onTap: (() {
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => const Subcategory(isubcategory: true,)));
+   // Navigator.of(context).push(MaterialPageRoute(builder: (context) => const Subcategory(isubcategory: true,)));
   }),
         child: const Icon(Icons.edit)):
 
  InkWell(
   onTap: (() {
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => const Subcategory(isubcategory: false,)));
+   // Navigator.of(context).push(MaterialPageRoute(builder: (context) => const Subcategory(isubcategory: false,)));
   }),
    child: Row(
                         children: const [

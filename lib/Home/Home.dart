@@ -9,8 +9,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../Orders.dart';
+import '../Provider/Addcategory.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, }) : super(key: key);
@@ -24,7 +26,12 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  
+  @override
+  void didChangeDependencies() {
+    Provider.of<AddCategory>(context).loadMainCategory();
+    Provider.of<AddCategory>(context).loadSubCategory();
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {

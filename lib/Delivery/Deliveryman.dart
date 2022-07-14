@@ -3,6 +3,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:foodyadmin/Models/Deliverymanmodel.dart';
+import 'package:foodyadmin/Models/Food.dart';
 
 import '../Categories/AddSubcategory.dart';
 import 'AddDeliveryman.dart';
@@ -191,7 +192,7 @@ DataRow dataRow(
       issubcategory ? 
       InkWell(
         onTap: (() {
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => const Subcategory(isubcategory: true,)));
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) =>   Subcategory(isubcategory: true,isnewsubcategory: false, maincategory: Food(description: '', id: '', image: '', name: '', price: ''),)));
   }),
         child:  Row(
                         children: const [
@@ -203,7 +204,7 @@ DataRow dataRow(
 
  InkWell(
   onTap: (() {
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => const Subcategory(isubcategory: false,)));
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => Subcategory(isubcategory: false,isnewsubcategory: false, maincategory: Food(description: '', id: '', image: '', name: '', price: ''),)));
   }),
    child: Container(
  

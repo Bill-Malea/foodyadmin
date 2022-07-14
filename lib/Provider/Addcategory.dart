@@ -1,17 +1,15 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
 import '../Models/Food.dart';
 import '../Utilities/toast.dart';
 
 class AddCategory extends ChangeNotifier {
 var dio = Dio();
-final List<Food> _subCategory =[];
+ List<Food> _subCategory =[];
 
 List<Food> _mainCategory =[];
 
@@ -27,13 +25,17 @@ List<Food> _mainCategory =[];
   List<Food> mainCategory() {
     return [... _mainCategory];
   }
-void addmainCategory(String category) async {
+Future<void> addmainCategory({required String? category}) async {
+  var data = {
+      'Name': category,
+  };
   try {
-    var response = await dio.post('https://foodie-test-9da37-default-rtdb.firebaseio.com/Foods.json',data: {category,});
+    var response = await dio.post('https://foodie-test-9da37-default-rtdb.firebaseio.com/Foods.json',data:data);
 
    if(response.statusCode==200){
-
+  await loadMainCategory() ;
 sucessToast('Successful');
+
    }else{
 
    if (kDebugMode) {
@@ -54,7 +56,7 @@ errorToast("Check Your Internet Connection and Try again");
   }
 }
 
-void addsubCategory(Food food,String category) async {
+Future<void> addsubCategory( {required Food food,required String maincategoryid,}) async {
  var  data = {
             'Name': food.name, 
             'Description': food.description, 
@@ -63,11 +65,11 @@ void addsubCategory(Food food,String category) async {
   };
   try {
     var response = await dio.post(
-  'https://foodie-test-9da37-default-rtdb.firebaseio.com/Foods/$category.json',
+  'https://foodie-test-9da37-default-rtdb.firebaseio.com/Foods/$maincategoryid/Subcategories.json',
     data:data,);
 
    if(response.statusCode==200){
-
+await loadSubCategory() ;
 sucessToast('Successful');
    }else{
 
@@ -87,21 +89,28 @@ errorToast("Check Your Internet Connection and Try again");
 }
 
   loadMainCategory() async {
-    const url = '';
+    const url = 'https://foodie-test-9da37-default-rtdb.firebaseio.com/Foods.json';
     try {
         var response = await dio.get(url);
       
       if (response.statusCode == 200) {
-        var data = json.decode(response.data) as Map<String, dynamic>;
+          
+      
+       
         List<Food> mainCategory = [];
-        data.forEach((id, _data) {
+        response.data.forEach((id, _data) {
+          if (kDebugMode) {
+            print(_data);
+          }
           mainCategory.add(Food(
           
             id: id,
-            name: _data[" name"], description: '', 
+            name: _data["Name"], 
+            description: '', 
             image: '', 
             price: '',
           ));
+         
           _mainCategory= mainCategory;
           notifyListeners();
         });
@@ -116,6 +125,84 @@ errorToast("Check Your Internet Connection and Try again");
       }
     }
   }
+
+
+
+  loadSubCategory() async {
+    const url = 'https://foodie-test-9da37-default-rtdb.firebaseio.com/Foods/.json';
+    try {
+        var response = await dio.get(url);
+      
+      if (response.statusCode == 200) {
+          
+      
+       
+        List<Food> sub = [];
+        response.data.forEach((id, _data) {
+
+         _data['Subcategories'].forEach(
+
+          (dataid, subcategory){
+          
+          
+          if (kDebugMode) {
+            print(' Sub category  =====++++ $subcategory');
+          }
+          
+
+      sub.add(Food(
+          
+            id: dataid,
+            name: subcategory["Name"], 
+            description:  subcategory["Description"], 
+            image:  subcategory["Image"], 
+            price:  subcategory["Price"],
+          ));
+         
+          _subCategory= sub;
+          notifyListeners();
+
+
+
+          }
+
+
+         );
+
+          if (kDebugMode) {
+            print(_data);
+          }
+        
+        });
+      } else {
+        errorToast(response.data.toString());
+      }
+    } on SocketException {
+     errorToast("Check Your Internet Connection and Try again");
+    } catch (e) {
+      if (kDebugMode) {
+        print(e.toString());
+      }
+    }
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
   editsubCategory(Food food) async {

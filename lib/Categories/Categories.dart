@@ -34,22 +34,10 @@ class _CategoriesState extends State< Categories> {
 
     
 
-
-
-    _addMaincategory() {
-      var  isValid = _categorieskey.currentState!.validate();
-     
-      if (isValid  ) {
-        widget.formkey.currentState?.save();
-        Provider.of<AddCategory>(context, listen: false).addmainCategory(_mainCategory)
-            ;
-      } 
-    }
-
    
     var style;
     List<Food> foods = Provider.of<AddCategory>(context).subCategory();
-    List<Food> mainCategory = Provider.of<AddCategory>(context).mainCategory();
+    List<Food> _mainCategory = Provider.of<AddCategory>(context).mainCategory();
     return  Form(
       child: Container(
         margin: const EdgeInsets.all(10),
@@ -57,26 +45,30 @@ class _CategoriesState extends State< Categories> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children:  [
           const Text('Add Category',style: TextStyle(fontWeight:FontWeight.bold,),),
-     FormInputField (isdescript: false,labelText: 'Name', 
-     onchanged: (val ) { 
-         setState(() {
-                    _mainCategory = val;
-                   if (kDebugMode) {
-                     print(val);
-                   }
-                  });
-      }, 
-      validator: (val ) { 
-          return val!.isEmpty ? 'Cannot be blank!' : null;
-       },),
-     
-    
-     InkWell(
-      onTap:() {
-        _addMaincategory;
-      }  ,
-       child: Container(
-     height: 40, decoration:  const BoxDecoration(
+     const SizedBox(height:10 ,),
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+InkWell(
+  onTap: (() {
+      Navigator.of(context).push(MaterialPageRoute(builder: (context) =>  Subcategory(isubcategory: false,isnewsubcategory: false, maincategory: Food(description: '', id: '', image: '', name: '', price: ''),)));
+  }),
+   child: Container(
+
+ height: 40,
+                        decoration:  const BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(4)),
                                color: Color(0xffffb800),
                                 shape: BoxShape.rectangle,
@@ -87,14 +79,16 @@ class _CategoriesState extends State< Categories> {
                        
       
                         child:  Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: const [
-                            Expanded(child: SizedBox()),
-                          
+                            Icon(Icons.add,size: 12,),
+                            SizedBox(width: 5,),
                             Text('Add Category',style: TextStyle(fontSize: 12,),),
-                               Expanded(child: SizedBox()),
                           ],
                         )),
-     ),
+ ),
+
+    
                          const SizedBox(height: 10,),
     const Text('Main Category',style: TextStyle(fontWeight:FontWeight.bold,),),
     
@@ -136,9 +130,9 @@ class _CategoriesState extends State< Categories> {
     
                   ],
                   rows: List.generate(
-                    foods.length,
+                    _mainCategory.length,
                     (index) => dataRow(
-                       context ,foods[index] ,index+1,false),
+                       context ,_mainCategory[index] ,index+1,false,_mainCategory[index]),
                   ),
                 ),
           ),
@@ -195,7 +189,7 @@ class _CategoriesState extends State< Categories> {
                   rows: List.generate(
                     foods.length,
                     (index) => dataRow(
-                       context ,foods[index] ,index+1 ,true ),
+                       context ,foods[index] ,index+1 ,true ,null),
                   ),
                 ),),
     
@@ -240,7 +234,7 @@ class _CategoriesState extends State< Categories> {
 
       
 DataRow dataRow(
-     BuildContext context,Food food,int index,bool issubcategory) {
+     BuildContext context,Food food,int index,bool issubcategory,dynamic maincategory) {
   return DataRow(
     cells: [
        DataCell(Text(
@@ -293,13 +287,13 @@ DataRow dataRow(
       issubcategory ? 
       InkWell(
         onTap: (() {
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => const Subcategory(isubcategory: true,)));
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => Subcategory(isubcategory: true,isnewsubcategory: false, maincategory: Food(description: '', id: '', image: '', name: '', price: ''),)));
   }),
         child: const Icon(Icons.edit)):
 
  InkWell(
   onTap: (() {
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => const Subcategory(isubcategory: false,)));
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => Subcategory(isubcategory: true, isnewsubcategory: true, maincategory: maincategory,)));
   }),
    child: Container(
  
