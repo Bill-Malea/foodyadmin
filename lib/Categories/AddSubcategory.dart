@@ -1,11 +1,18 @@
+
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../FormInput.dart';
+import '../Models/Food.dart';
+import '../Provider/Addcategory.dart';
 
 class Subcategory extends StatefulWidget {
+   final Food maincategory;
   final bool isubcategory;
-  const Subcategory({Key? key, required this.isubcategory}) : super(key: key);
+  final bool isnewsubcategory;
+  const Subcategory({Key? key, required this.isubcategory, required this.isnewsubcategory, required this.maincategory, }) : super(key: key);
 
   @override
   _SubcategoryState createState() => _SubcategoryState();
@@ -19,6 +26,7 @@ final _key = GlobalKey<FormState>();
   var _description;
   var _price;
   var _name;
+  var _isLoading = false;
 
 
   @override
@@ -31,6 +39,16 @@ final _key = GlobalKey<FormState>();
 
 
 
+    _addMaincategory() {
+      var  isValid = _key.currentState!.validate();
+     
+      if (isValid  ) {
+      
+      } 
+    }
+
+
+
 
 
 
@@ -38,32 +56,39 @@ final _key = GlobalKey<FormState>();
     
     upload() {
       final isValid = _key.currentState!.validate();
-      // var newproject = Project(
-      //   id: '',
-      //   image: _image,
-      //   description: _description,
-      //   link: _link,
-      //   name: _name,
-      // );
-      if (kDebugMode) {
-        print(isValid);
+     
+     
+      if (isValid && widget.isubcategory) {
+          setState(() {
+          _isLoading=true;
+        });
+        
+          Provider.of<AddCategory>(context, listen: false).addsubCategory( food:Food(
+      id: '',
+        image: _image,
+        description: _description,
+        name: _name,
+        price: _price,
+      ), maincategoryid: widget.maincategory.id ).whenComplete(() {
+ setState(() {
+          _isLoading=false;
+        });
+
+        });
+      } else if (isValid && !widget.isubcategory && !widget.isnewsubcategory) {
+        setState(() {
+          _isLoading=true;
+        });
+    
+        Provider.of<AddCategory>(context, listen: false).addmainCategory(category:_name).whenComplete(() {
+ setState(() {
+          _isLoading=false;
+        });
+
+        });
+
       }
-      if (isValid) {
-        _key.currentState!.save();
-        // Provider.of<Projectsprovider>(context, listen: false)
-        //     .addproject(newproject);
-      } else if (isValid ) {
-        // var editproject = Project(
-        //   id: widget.project.id,
-        //   image: _image,
-        //   description: _description,
-        //   link: _link,
-        //   name: _name,
-        // );
-        // _key.currentState!.save();
-        // Provider.of<Projectsprovider>(context, listen: false)
-        //     .addproject(editproject);
-      }
+     
     }
 
 return Scaffold(
@@ -98,7 +123,7 @@ body:SingleChildScrollView(
               const SizedBox(
                 height: 10,
               ),
-              FormInputField(
+              if(widget.isubcategory)   FormInputField(
                // initialvalue: id.isEmpty ? '' : widget.project.image,
                 isdescript: false,
                 labelText: 'Image',
@@ -145,7 +170,9 @@ body:SingleChildScrollView(
                
               ),
               
-              Container(
+              _isLoading ? const CircularProgressIndicator(color: Colors.black,
+  
+    strokeWidth: 1.0,): Container(
                   width: double.infinity,
                   margin: const EdgeInsets.all(20),
                   child: ElevatedButton(
